@@ -16,6 +16,7 @@ module Database.TokyoCabinet.HDB
     , tune
     , setcache
     , setxmsiz
+    , setdfunit
     , open
     , close
     , put
@@ -40,6 +41,8 @@ module Database.TokyoCabinet.HDB
     , path
     , rnum
     , fsiz
+    , setdbgfd
+    , printmeta
     )
     where
 
@@ -138,6 +141,10 @@ setcache hdb rcnum = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetcache rcnum)
 -- | Set the size of extra mapped memory.
 setxmsiz :: HDB -> Int64 -> IO Bool
 setxmsiz hdb xmsiz = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetxmsiz xmsiz)
+
+-- | Set the unit step number of auto defragmentation.
+setdfunit :: HDB -> Int32 -> IO Bool
+setdfunit hdb dfunit = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetdfunit dfunit)
 
 -- | Open a database file.
 open :: HDB -> String -> [OpenMode] -> IO Bool
@@ -250,3 +257,13 @@ rnum hdb = withForeignPtr (unTCHDB hdb) c_tchdbrnum
 -- | Return the size of the database file.
 fsiz :: HDB -> IO Word64
 fsiz hdb = withForeignPtr (unTCHDB hdb) c_tchdbfsiz
+
+-- | Set the file descriptor for debugging output.
+setdbgfd :: HDB -> Int -> IO ()
+setdbgfd hdb fd =
+    withForeignPtr (unTCHDB hdb) $ \p ->
+        c_tchdbsetdbgfd p fd
+
+-- | Print meta data of the header into the debuggin output.
+printmeta :: HDB -> IO ()
+printmeta hdb = withForeignPtr (unTCHDB hdb) c_tchdbprintmeta

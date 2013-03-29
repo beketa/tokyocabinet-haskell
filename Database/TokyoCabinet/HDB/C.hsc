@@ -76,6 +76,9 @@ foreign import ccall safe "tchdbsetcache"
 foreign import ccall safe "tchdbsetxmsiz"
   c_tchdbsetxmsiz :: Ptr HDB' -> Int64 -> IO Bool
 
+foreign import ccall safe "tchdbsetdfunit"
+  c_tchdbsetdfunit :: Ptr HDB' -> Int32 -> IO Bool
+
 foreign import ccall safe "tchdbopen"
   c_tchdbopen :: Ptr HDB' -> CString -> CInt -> IO Bool
 
@@ -165,3 +168,9 @@ foreign import ccall safe "tchdbrnum"
 
 foreign import ccall safe "tchdbfsiz"
   c_tchdbfsiz :: Ptr HDB' -> IO Word64
+
+foreign import ccall safe "tchdbsetdbgfd"
+  c_tchdbsetdbgfd :: Ptr HDB' -> Int -> IO ()
+
+foreign import ccall safe "tchdbprintmeta"
+  c_tchdbprintmeta :: Ptr HDB' -> IO ()
